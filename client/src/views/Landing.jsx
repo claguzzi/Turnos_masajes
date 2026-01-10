@@ -5,7 +5,7 @@ export default function Landing() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-rose-50 to-rose-100 px-4 py-10 text-center">
      
       <h1 className="text-3xl font-bold text-rose-700 mb-3 md:text-5xl">
-        Bienvenido a <span className="text-rose-500">Tu Turno Massage</span>
+        Bienvenido a <span className="text-rose-500">ESPACIO ZEN</span>
       </h1>
 
       
