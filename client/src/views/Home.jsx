@@ -8,12 +8,21 @@ import { useEffect, useState } from "react";
 /* 🔹 Horarios hardcodeados */
 const HORARIOS = ["19:30", "20:00"];
 
+/* 🔹 Fechas permitidas (hoy → 1 mes) */
+const hoy = new Date();
+const fechaMaxima = new Date();
+fechaMaxima.setMonth(hoy.getMonth() + 1);
+
+const minFecha = hoy.toISOString().split("T")[0];
+const maxFecha = fechaMaxima.toISOString().split("T")[0];
+
 export default function Home() {
   const navigate = useNavigate();
 
   const [horariosOcupados, setHorariosOcupados] = useState([]);
   const [fechaSeleccionada, setFechaSeleccionada] = useState("");
 
+  // ⚠️ initialValues DE DESARROLLO (NO TOCAR)
   const initialValues = {
     nombre: "claudio",
     telefono: "2222222222",
@@ -28,7 +37,6 @@ export default function Home() {
       const { data } = await axios.get(
         `http://localhost:3001/api/turnos?fecha=${fecha}`
       );
-
       setHorariosOcupados(data.map((t) => t.hora));
     } catch (error) {
       console.error("Error cargando horarios", error);
@@ -55,7 +63,6 @@ Tu turno fue reservado correctamente ✅
 
 Espacio Zen 🌿
 `;
-
     await axios.post("http://localhost:3001/api/email", {
       to: turno.email,
       subject: "Confirmación de turno – Espacio Zen",
@@ -65,6 +72,16 @@ Espacio Zen 🌿
 
   /* 📌 Submit */
   const handleSubmit = async (values, { resetForm }) => {
+    // ⛔ Protección extra contra duplicados
+    if (horariosOcupados.includes(values.hora)) {
+      Swal.fire(
+        "Horario no disponible",
+        "Ese horario ya fue reservado. Elegí otro 🙏",
+        "warning"
+      );
+      return;
+    }
+
     try {
       await axios.post("http://localhost:3001/api/turnos", values);
 
@@ -82,8 +99,8 @@ Espacio Zen 🌿
       });
 
       resetForm();
-      setHorariosOcupados([]);
       setFechaSeleccionada("");
+      setHorariosOcupados([]);
     } catch (error) {
       Swal.fire(
         "Error",
@@ -111,7 +128,7 @@ Espacio Zen 🌿
         validationSchema={turnosSchema}
         onSubmit={handleSubmit}
       >
-        {({ isValid, dirty, setFieldValue, values }) => (
+        {({ isValid, setFieldValue, values }) => (
           <Form className="bg-white/70 backdrop-blur p-6 rounded-2xl shadow-xl w-full max-w-md border border-stone-200">
 
             {/* Nombre */}
@@ -121,14 +138,9 @@ Espacio Zen 🌿
               </label>
               <Field
                 name="nombre"
-                type="text"
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#7b6f5b] outline-none"
+                className="w-full px-3 py-2 border border-stone-300 rounded-lg"
               />
-              <ErrorMessage
-                name="nombre"
-                component="div"
-                className="text-red-500 text-sm"
-              />
+              <ErrorMessage name="nombre" component="div" className="text-red-500 text-sm" />
             </div>
 
             {/* Teléfono */}
@@ -138,14 +150,9 @@ Espacio Zen 🌿
               </label>
               <Field
                 name="telefono"
-                type="tel"
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#7b6f5b] outline-none"
+                className="w-full px-3 py-2 border border-stone-300 rounded-lg"
               />
-              <ErrorMessage
-                name="telefono"
-                component="div"
-                className="text-red-500 text-sm"
-              />
+              <ErrorMessage name="telefono" component="div" className="text-red-500 text-sm" />
             </div>
 
             {/* Email */}
@@ -156,13 +163,9 @@ Espacio Zen 🌿
               <Field
                 name="email"
                 type="email"
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#7b6f5b] outline-none"
+                className="w-full px-3 py-2 border border-stone-300 rounded-lg"
               />
-              <ErrorMessage
-                name="email"
-                component="div"
-                className="text-red-500 text-sm"
-              />
+              <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
             </div>
 
             {/* Fecha */}
@@ -173,7 +176,8 @@ Espacio Zen 🌿
               <Field
                 type="date"
                 name="fecha"
-                min={new Date().toISOString().split("T")[0]}
+                min={minFecha}
+                max={maxFecha}
                 className="w-full px-3 py-2 border border-stone-300 rounded-lg"
                 onChange={(e) => {
                   setFieldValue("fecha", e.target.value);
@@ -181,11 +185,7 @@ Espacio Zen 🌿
                   setFechaSeleccionada(e.target.value);
                 }}
               />
-              <ErrorMessage
-                name="fecha"
-                component="div"
-                className="text-red-500 text-sm"
-              />
+              <ErrorMessage name="fecha" component="div" className="text-red-500 text-sm" />
             </div>
 
             {/* Horario */}
@@ -210,25 +210,22 @@ Espacio Zen 🌿
                   </option>
                 ))}
               </Field>
-              <ErrorMessage
-                name="hora"
-                component="div"
-                className="text-red-500 text-sm"
-              />
+              <ErrorMessage name="hora" component="div" className="text-red-500 text-sm" />
             </div>
 
             {/* Botón */}
             <button
               type="submit"
-              disabled={!isValid || !dirty}
+              disabled={!isValid || !values.hora}
               className={`w-full py-3 rounded-full font-medium transition ${
-                !isValid || !dirty
+                !isValid || !values.hora
                   ? "bg-stone-300 cursor-not-allowed"
                   : "bg-[#7b6f5b] hover:bg-[#6a5f4d] text-white"
               }`}
             >
               Confirmar turno
             </button>
+
           </Form>
         )}
       </Formik>
