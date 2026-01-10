@@ -2,37 +2,43 @@ import { Link } from "react-router-dom";
 
 export default function Landing() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-rose-50 to-rose-100 px-4 py-10 text-center">
-     
-      <h1 className="text-3xl font-bold text-rose-700 mb-3 md:text-5xl">
-        Bienvenido a <span className="text-rose-500">ESPACIO ZEN</span>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#f4efe9] px-4 py-10 text-center">
+      
+      {/* Título */}
+      <h1 className="text-3xl md:text-5xl font-serif tracking-wide text-stone-800 mb-3">
+        ESPACIO ZEN
       </h1>
 
-      
-      <p className="text-base text-rose-600 mb-6 md:text-lg">
-        Agenda tu turno de masajes de manera fácil y relajante.
+      <p className="text-stone-500 italic mb-8">
+        Masajes relajantes y descontracturantes
       </p>
 
-      
-      <div className="bg-white shadow-md rounded-xl p-5 w-full max-w-sm mb-6 border border-rose-100">
-        <h2 className="text-lg font-semibold text-rose-500 mb-3">
-          Advertencias importantes ⚠️
+      <p className="max-w-md text-stone-600 mb-10 leading-relaxed">
+        Un momento de calma para tu cuerpo y tu mente.
+      </p>
+
+      {/* Card de advertencias */}
+      <div className="bg-white/70 backdrop-blur shadow-lg rounded-2xl p-6 w-full max-w-md mb-10 border border-stone-200">
+        <h2 className="text-lg font-medium text-stone-700 mb-4">
+          Información importante
         </h2>
-        <ul className="text-left text-rose-700 list-disc list-inside space-y-2 text-sm md:text-base">
-          <li>Los masajes no sustituyen atención médica profesional.</li>
-          <li>Contraindicado en casos de lesiones graves, fiebre o infecciones.</li>
-          <li>Se requiere reserva previa para disponibilidad.</li>
-          <li>Cancelaciones con al menos 24 horas de anticipación.</li>
+
+        <ul className="text-left text-stone-600 list-disc list-inside space-y-2 text-sm">
+          <li>Los masajes no sustituyen atención médica.</li>
+          <li>No recomendado con fiebre, infecciones o lesiones graves.</li>
+          <li>Se requiere reserva previa.</li>
+          <li>Cancelaciones con 24 hs de anticipación.</li>
         </ul>
       </div>
 
-    
+      {/* Botón */}
       <Link
         to="/home"
-        className="w-full max-w-xs px-6 py-3 bg-rose-300 text-rose-900 font-medium rounded-lg shadow hover:bg-rose-400 transition"
+        className="px-10 py-3 rounded-full bg-[#7b6f5b] text-white font-medium shadow-lg hover:bg-[#6a5f4d] transition-all"
       >
-        Reservar un turno
+        Reservar turno
       </Link>
+
     </div>
   );
 }

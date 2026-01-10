@@ -15,7 +15,7 @@ export default function AdminLogin() {
         icon: "warning",
         title: "Campos incompletos",
         text: "Completá usuario y contraseña",
-        confirmButtonColor: "#f9a8d4",
+        confirmButtonColor: "#7b6f5b",
       });
       setSubmitting(false);
       return;
@@ -32,7 +32,7 @@ export default function AdminLogin() {
           icon: "success",
           title: "Bienvenido",
           text: "Acceso concedido al panel de administración",
-          confirmButtonColor: "#f9a8d4",
+          confirmButtonColor: "#7b6f5b",
         });
 
         navigate("/admin");
@@ -46,7 +46,7 @@ export default function AdminLogin() {
         icon: "error",
         title: "Error de login",
         text: msg,
-        confirmButtonColor: "#f87171",
+        confirmButtonColor: "#b45309",
       });
     } finally {
       setSubmitting(false);
@@ -54,9 +54,9 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-rose-50 to-rose-100 px-4 py-10">
-      <h1 className="text-3xl sm:text-4xl font-bold text-rose-700 mb-6 text-center">
-        Panel de Admin
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#f4efe9] px-4 py-10">
+      <h1 className="text-3xl sm:text-4xl font-serif text-stone-800 mb-8 text-center">
+        Panel de Administración
       </h1>
 
       <Formik
@@ -64,30 +64,31 @@ export default function AdminLogin() {
         onSubmit={handleLogin}
       >
         {({ isSubmitting }) => (
-          <Form className="bg-white shadow-md rounded-xl p-6 w-full max-w-md border border-rose-100">
+          <Form className="bg-white/70 backdrop-blur shadow-xl rounded-2xl p-8 w-full max-w-md border border-stone-200">
+
             {/* Usuario */}
-            <div className="mb-4">
-              <label className="block text-rose-600 mb-2 font-medium">
+            <div className="mb-6">
+              <label className="block text-stone-700 mb-2 font-medium">
                 Usuario
               </label>
               <Field
                 type="text"
                 name="username"
                 placeholder="admin"
-                className="w-full px-3 py-2 border border-rose-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-300"
+                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6f5b]"
               />
             </div>
 
             {/* Contraseña */}
-            <div className="mb-6">
-              <label className="block text-rose-600 mb-2 font-medium">
+            <div className="mb-8">
+              <label className="block text-stone-700 mb-2 font-medium">
                 Contraseña
               </label>
               <Field
                 type="password"
                 name="password"
                 placeholder="********"
-                className="w-full px-3 py-2 border border-rose-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-300"
+                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6f5b]"
               />
             </div>
 
@@ -95,10 +96,10 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full px-6 py-3 font-medium rounded-lg shadow transition ${
+              className={`w-full px-6 py-3 font-medium rounded-full shadow transition ${
                 isSubmitting
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-rose-300 text-rose-900 hover:bg-rose-400"
+                  ? "bg-stone-300 cursor-not-allowed"
+                  : "bg-[#7b6f5b] text-white hover:bg-[#6a5f4d]"
               }`}
             >
               {isSubmitting ? "Ingresando..." : "Ingresar"}

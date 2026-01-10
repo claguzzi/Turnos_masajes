@@ -8,11 +8,11 @@ const estadoClase = (estado) => {
   switch (estado) {
     case "confirmado":
     case "realizado":
-      return "text-green-600 font-bold";
+      return "text-green-700 font-bold";
     case "cancelado":
-      return "text-red-600 font-bold";
+      return "text-red-700 font-bold";
     default:
-      return "text-yellow-600 font-bold"; // pendiente
+      return "text-yellow-700 font-bold";
   }
 };
 
@@ -22,7 +22,6 @@ export default function Admin() {
   const [turnos, setTurnos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // edición
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({
     fecha: "",
@@ -30,12 +29,10 @@ export default function Admin() {
     estado: "",
   });
 
-  /* ================== CERRAR SESIÓN ================== */
   const cerrarSesion = () => {
-     navigate("/adminLogin");
+    navigate("/adminLogin");
   };
 
-  /* ================== FETCH ================== */
   const fetchTurnos = async () => {
     try {
       const { data } = await axios.get("http://localhost:3001/api/turnos");
@@ -51,15 +48,14 @@ export default function Admin() {
     fetchTurnos();
   }, []);
 
-  /* ================== ELIMINAR ================== */
   const eliminarTurno = async (id) => {
     const result = await Swal.fire({
       title: "¿Eliminar turno?",
-      text: "⚠️ Esta acción no se puede deshacer",
+      text: "Esta acción no se puede deshacer",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#f87171",
-      cancelButtonColor: "#9ca3af",
+      confirmButtonColor: "#b45309",
+      cancelButtonColor: "#a8a29e",
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
     });
@@ -75,7 +71,6 @@ export default function Admin() {
     }
   };
 
-  /* ================== EDITAR ================== */
   const iniciarEdicion = (turno) => {
     setEditId(turno.id);
     setEditData({
@@ -90,36 +85,31 @@ export default function Admin() {
       await axios.put(`http://localhost:3001/api/turnos/${id}`, editData);
       setEditId(null);
       fetchTurnos();
-      Swal.fire(
-        "Actualizado",
-        "Turno actualizado correctamente",
-        "success"
-      );
+      Swal.fire("Actualizado", "Turno actualizado", "success");
     } catch {
       Swal.fire("Error", "No se pudo actualizar el turno", "error");
     }
   };
 
-  /* ================== LOADING ================== */
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-pink-50">
-        <p className="text-pink-700 font-medium">Cargando turnos...</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#f4efe9]">
+        <p className="text-stone-600">Cargando turnos...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-pink-50 p-3 sm:p-6">
-      {/* Header */}
-      <header className="bg-pink-100 shadow-md p-4 rounded-xl flex justify-between items-center">
-        <h1 className="text-xl sm:text-2xl font-bold text-pink-800">
+    <div className="min-h-screen bg-[#f4efe9] p-3 sm:p-6">
+
+      <header className="bg-white/70 backdrop-blur shadow-md p-4 rounded-2xl flex justify-between items-center border border-stone-200">
+        <h1 className="text-xl sm:text-2xl font-serif text-stone-800">
           Panel de Administración
         </h1>
 
         <button
           onClick={cerrarSesion}
-          className="px-4 py-2 bg-red-200 text-red-900 rounded-lg hover:bg-red-300 transition"
+          className="px-4 py-2 bg-stone-200 text-stone-800 rounded-full hover:bg-stone-300 transition"
         >
           Cerrar sesión
         </button>
@@ -127,18 +117,14 @@ export default function Admin() {
 
       {/* ================= MOBILE ================= */}
       <div className="mt-4 space-y-4 sm:hidden">
-        {turnos.length === 0 && (
-          <p className="text-center text-gray-500">No hay turnos</p>
-        )}
-
         {turnos.map((turno) => (
           <div
             key={turno.id}
-            className="bg-white rounded-xl shadow p-4 border border-pink-100"
+            className="bg-white/70 backdrop-blur rounded-2xl shadow p-4 border border-stone-200"
           >
-            <p className="font-semibold text-pink-700">{turno.nombre}</p>
-            <p className="text-sm text-gray-600">{turno.telefono}</p>
-            <p className="text-sm text-gray-600">{turno.email}</p>
+            <p className="font-semibold text-stone-800">{turno.nombre}</p>
+            <p className="text-sm text-stone-500">{turno.telefono}</p>
+            <p className="text-sm text-stone-500">{turno.email}</p>
 
             {editId === turno.id ? (
               <>
@@ -148,7 +134,7 @@ export default function Admin() {
                   onChange={(e) =>
                     setEditData({ ...editData, fecha: e.target.value })
                   }
-                  className="w-full mt-2 border rounded px-2 py-1"
+                  className="w-full mt-2 border border-stone-300 rounded px-2 py-1"
                 />
 
                 <input
@@ -157,7 +143,7 @@ export default function Admin() {
                   onChange={(e) =>
                     setEditData({ ...editData, hora: e.target.value })
                   }
-                  className="w-full mt-2 border rounded px-2 py-1"
+                  className="w-full mt-2 border border-stone-300 rounded px-2 py-1"
                 />
 
                 <select
@@ -165,7 +151,7 @@ export default function Admin() {
                   onChange={(e) =>
                     setEditData({ ...editData, estado: e.target.value })
                   }
-                  className="w-full mt-2 border rounded px-2 py-1"
+                  className="w-full mt-2 border border-stone-300 rounded px-2 py-1"
                 >
                   <option value="pendiente">pendiente</option>
                   <option value="confirmado">confirmado</option>
@@ -176,13 +162,13 @@ export default function Admin() {
                 <div className="flex gap-2 mt-3">
                   <button
                     onClick={() => guardarEdicion(turno.id)}
-                    className="flex-1 py-2 bg-green-200 text-green-900 rounded"
+                    className="flex-1 py-2 bg-[#7b6f5b] text-white rounded-full"
                   >
                     Guardar
                   </button>
                   <button
                     onClick={() => setEditId(null)}
-                    className="flex-1 py-2 bg-gray-200 rounded"
+                    className="flex-1 py-2 bg-stone-200 rounded-full"
                   >
                     Cancelar
                   </button>
@@ -203,13 +189,13 @@ export default function Admin() {
                 <div className="flex gap-2 mt-3">
                   <button
                     onClick={() => iniciarEdicion(turno)}
-                    className="flex-1 py-2 bg-yellow-200 text-yellow-900 rounded"
+                    className="flex-1 py-2 bg-stone-200 rounded-full"
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => eliminarTurno(turno.id)}
-                    className="flex-1 py-2 bg-red-200 text-red-900 rounded"
+                    className="flex-1 py-2 bg-red-200 rounded-full"
                   >
                     Eliminar
                   </button>
@@ -221,9 +207,9 @@ export default function Admin() {
       </div>
 
       {/* ================= DESKTOP ================= */}
-      <div className="hidden sm:block mt-6 bg-white shadow-lg rounded-xl overflow-x-auto">
+      <div className="hidden sm:block mt-6 bg-white/70 backdrop-blur shadow-xl rounded-2xl overflow-x-auto border border-stone-200">
         <table className="w-full text-sm">
-          <thead className="bg-pink-200 text-pink-900">
+          <thead className="bg-stone-200 text-stone-800">
             <tr>
               <th className="p-3 text-left">Nombre</th>
               <th className="p-3 text-left">Teléfono</th>
@@ -236,7 +222,7 @@ export default function Admin() {
           </thead>
           <tbody>
             {turnos.map((turno) => (
-              <tr key={turno.id} className="border-b hover:bg-pink-50">
+              <tr key={turno.id} className="border-b border-stone-200 hover:bg-stone-50">
                 <td className="p-3">{turno.nombre}</td>
                 <td className="p-3">{turno.telefono}</td>
                 <td className="p-3">{turno.email}</td>
@@ -248,12 +234,9 @@ export default function Admin() {
                         type="date"
                         value={editData.fecha}
                         onChange={(e) =>
-                          setEditData({
-                            ...editData,
-                            fecha: e.target.value,
-                          })
+                          setEditData({ ...editData, fecha: e.target.value })
                         }
-                        className="border rounded px-2 py-1"
+                        className="border border-stone-300 rounded px-2 py-1"
                       />
                     </td>
                     <td className="p-3">
@@ -261,24 +244,18 @@ export default function Admin() {
                         type="time"
                         value={editData.hora}
                         onChange={(e) =>
-                          setEditData({
-                            ...editData,
-                            hora: e.target.value,
-                          })
+                          setEditData({ ...editData, hora: e.target.value })
                         }
-                        className="border rounded px-2 py-1"
+                        className="border border-stone-300 rounded px-2 py-1"
                       />
                     </td>
                     <td className="p-3">
                       <select
                         value={editData.estado}
                         onChange={(e) =>
-                          setEditData({
-                            ...editData,
-                            estado: e.target.value,
-                          })
+                          setEditData({ ...editData, estado: e.target.value })
                         }
-                        className="border rounded px-2 py-1"
+                        className="border border-stone-300 rounded px-2 py-1"
                       >
                         <option value="pendiente">pendiente</option>
                         <option value="confirmado">confirmado</option>
@@ -289,13 +266,13 @@ export default function Admin() {
                     <td className="p-3 flex gap-2 justify-center">
                       <button
                         onClick={() => guardarEdicion(turno.id)}
-                        className="px-3 py-1 bg-green-200 rounded"
+                        className="px-3 py-1 bg-[#7b6f5b] text-white rounded"
                       >
                         Guardar
                       </button>
                       <button
                         onClick={() => setEditId(null)}
-                        className="px-3 py-1 bg-gray-200 rounded"
+                        className="px-3 py-1 bg-stone-200 rounded"
                       >
                         Cancelar
                       </button>
@@ -311,7 +288,7 @@ export default function Admin() {
                     <td className="p-3 flex gap-2 justify-center">
                       <button
                         onClick={() => iniciarEdicion(turno)}
-                        className="px-3 py-1 bg-yellow-200 rounded"
+                        className="px-3 py-1 bg-stone-200 rounded"
                       >
                         Editar
                       </button>
