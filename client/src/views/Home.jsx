@@ -9,18 +9,25 @@ import { useEffect, useState } from "react";
 const HORARIOS = ["19:30", "20:00"];
 
 /* 🔹 Fechas permitidas (hoy → 1 mes) */
+const getFechaLocal = (date) =>
+  new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+    .toISOString()
+    .split("T")[0];
+
 const hoy = new Date();
 const fechaMaxima = new Date();
 fechaMaxima.setMonth(hoy.getMonth() + 1);
 
-const minFecha = hoy.toISOString().split("T")[0];
-const maxFecha = fechaMaxima.toISOString().split("T")[0];
+const minFecha = getFechaLocal(hoy);
+const maxFecha = getFechaLocal(fechaMaxima);
 
 export default function Home() {
   const navigate = useNavigate();
 
   const [horariosOcupados, setHorariosOcupados] = useState([]);
   const [fechaSeleccionada, setFechaSeleccionada] = useState("");
+  const [cargandoHorarios, setCargandoHorarios] = useState(false);
+  const [enviandoTurno, setEnviandoTurno] = useState(false);
 
   // ⚠️ initialValues DE DESARROLLO (NO TOCAR)
   const initialValues = {
@@ -31,8 +38,9 @@ export default function Home() {
     hora: "",
   };
 
-  /* 📌 Buscar turnos ocupados por fecha */
+  /* 📌 Buscar horarios ocupados */
   const fetchHorariosOcupados = async (fecha) => {
+    setCargandoHorarios(true);
     try {
       const { data } = await axios.get(
         `http://localhost:3001/api/turnos?fecha=${fecha}`
@@ -41,17 +49,20 @@ export default function Home() {
     } catch (error) {
       console.error("Error cargando horarios", error);
       setHorariosOcupados([]);
+    } finally {
+      setCargandoHorarios(false);
     }
   };
 
   /* 👀 Cuando cambia la fecha */
   useEffect(() => {
     if (fechaSeleccionada) {
+      setHorariosOcupados([]);
       fetchHorariosOcupados(fechaSeleccionada);
     }
   }, [fechaSeleccionada]);
 
-  /* 📧 Email */
+  /* 📧 Email confirmación */
   const enviarEmailConfirmacion = async (turno) => {
     const mensaje = `
 Hola ${turno.nombre} 👋
@@ -70,8 +81,11 @@ Espacio Zen 🌿
     });
   };
 
-  /* 📌 Submit */
+  /* 🚫 SUBMIT BLOQUEADO A UN SOLO CLICK */
   const handleSubmit = async (values, { resetForm }) => {
+    // ⛔ BLOQUEO TOTAL
+    if (enviandoTurno) return;
+
     // ⛔ Protección extra contra duplicados
     if (horariosOcupados.includes(values.hora)) {
       Swal.fire(
@@ -81,6 +95,8 @@ Espacio Zen 🌿
       );
       return;
     }
+
+    setEnviandoTurno(true);
 
     try {
       await axios.post("http://localhost:3001/api/turnos", values);
@@ -107,6 +123,8 @@ Espacio Zen 🌿
         error.response?.data?.message || "No se pudo reservar",
         "error"
       );
+    } finally {
+      setEnviandoTurno(false);
     }
   };
 
@@ -138,9 +156,13 @@ Espacio Zen 🌿
               </label>
               <Field
                 name="nombre"
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg"
+                className="w-full px-3 py-2 border rounded-lg"
               />
-              <ErrorMessage name="nombre" component="div" className="text-red-500 text-sm" />
+              <ErrorMessage
+                name="nombre"
+                component="div"
+                className="text-red-500 text-sm"
+              />
             </div>
 
             {/* Teléfono */}
@@ -150,9 +172,13 @@ Espacio Zen 🌿
               </label>
               <Field
                 name="telefono"
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg"
+                className="w-full px-3 py-2 border rounded-lg"
               />
-              <ErrorMessage name="telefono" component="div" className="text-red-500 text-sm" />
+              <ErrorMessage
+                name="telefono"
+                component="div"
+                className="text-red-500 text-sm"
+              />
             </div>
 
             {/* Email */}
@@ -161,11 +187,15 @@ Espacio Zen 🌿
                 Email
               </label>
               <Field
-                name="email"
                 type="email"
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg"
+                name="email"
+                className="w-full px-3 py-2 border rounded-lg"
               />
-              <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className="text-red-500 text-sm"
+              />
             </div>
 
             {/* Fecha */}
@@ -178,14 +208,18 @@ Espacio Zen 🌿
                 name="fecha"
                 min={minFecha}
                 max={maxFecha}
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg"
+                className="w-full px-3 py-2 border rounded-lg"
                 onChange={(e) => {
                   setFieldValue("fecha", e.target.value);
                   setFieldValue("hora", "");
                   setFechaSeleccionada(e.target.value);
                 }}
               />
-              <ErrorMessage name="fecha" component="div" className="text-red-500 text-sm" />
+              <ErrorMessage
+                name="fecha"
+                component="div"
+                className="text-red-500 text-sm"
+              />
             </div>
 
             {/* Horario */}
@@ -196,10 +230,14 @@ Espacio Zen 🌿
               <Field
                 as="select"
                 name="hora"
-                disabled={!values.fecha}
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg"
+                disabled={!values.fecha || cargandoHorarios}
+                className="w-full px-3 py-2 border rounded-lg"
               >
-                <option value="">Seleccioná horario</option>
+                <option value="">
+                  {cargandoHorarios
+                    ? "Cargando horarios..."
+                    : "Seleccioná horario"}
+                </option>
                 {HORARIOS.map((h) => (
                   <option
                     key={h}
@@ -210,20 +248,24 @@ Espacio Zen 🌿
                   </option>
                 ))}
               </Field>
-              <ErrorMessage name="hora" component="div" className="text-red-500 text-sm" />
+              <ErrorMessage
+                name="hora"
+                component="div"
+                className="text-red-500 text-sm"
+              />
             </div>
 
             {/* Botón */}
             <button
               type="submit"
-              disabled={!isValid || !values.hora}
+              disabled={!isValid || !values.hora || enviandoTurno}
               className={`w-full py-3 rounded-full font-medium transition ${
-                !isValid || !values.hora
+                !isValid || !values.hora || enviandoTurno
                   ? "bg-stone-300 cursor-not-allowed"
                   : "bg-[#7b6f5b] hover:bg-[#6a5f4d] text-white"
               }`}
             >
-              Confirmar turno
+              {enviandoTurno ? "Reservando..." : "Confirmar turno"}
             </button>
 
           </Form>
@@ -232,3 +274,4 @@ Espacio Zen 🌿
     </div>
   );
 }
+  
