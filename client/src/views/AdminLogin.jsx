@@ -9,7 +9,7 @@ export default function AdminLogin() {
   const handleLogin = async (values, { setSubmitting }) => {
     const { username, password } = values;
 
-    // Validación simple
+    // 🔹 Validación simple
     if (!username || !password) {
       Swal.fire({
         icon: "warning",
@@ -28,6 +28,9 @@ export default function AdminLogin() {
       );
 
       if (response.status === 200) {
+        // ✅ FLAG ADMIN
+        localStorage.setItem("isAdmin", "true");
+
         Swal.fire({
           icon: "success",
           title: "Bienvenido",
@@ -65,7 +68,7 @@ export default function AdminLogin() {
       >
         {({ isSubmitting }) => (
           <Form className="bg-white/70 backdrop-blur shadow-xl rounded-2xl p-8 w-full max-w-md border border-stone-200">
-
+            
             {/* Usuario */}
             <div className="mb-6">
               <label className="block text-stone-700 mb-2 font-medium">

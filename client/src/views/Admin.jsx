@@ -29,7 +29,9 @@ export default function Admin() {
     estado: "",
   });
 
+  // 🔐 LOGOUT CORRECTO
   const cerrarSesion = () => {
+    localStorage.removeItem("isAdmin");
     navigate("/adminLogin");
   };
 
@@ -101,7 +103,7 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen bg-[#f4efe9] p-3 sm:p-6">
-
+      {/* Header */}
       <header className="bg-white/70 backdrop-blur shadow-md p-4 rounded-2xl flex justify-between items-center border border-stone-200">
         <h1 className="text-xl sm:text-2xl font-serif text-stone-800">
           Panel de Administración
@@ -222,7 +224,10 @@ export default function Admin() {
           </thead>
           <tbody>
             {turnos.map((turno) => (
-              <tr key={turno.id} className="border-b border-stone-200 hover:bg-stone-50">
+              <tr
+                key={turno.id}
+                className="border-b border-stone-200 hover:bg-stone-50"
+              >
                 <td className="p-3">{turno.nombre}</td>
                 <td className="p-3">{turno.telefono}</td>
                 <td className="p-3">{turno.email}</td>
@@ -234,7 +239,10 @@ export default function Admin() {
                         type="date"
                         value={editData.fecha}
                         onChange={(e) =>
-                          setEditData({ ...editData, fecha: e.target.value })
+                          setEditData({
+                            ...editData,
+                            fecha: e.target.value,
+                          })
                         }
                         className="border border-stone-300 rounded px-2 py-1"
                       />
@@ -244,7 +252,10 @@ export default function Admin() {
                         type="time"
                         value={editData.hora}
                         onChange={(e) =>
-                          setEditData({ ...editData, hora: e.target.value })
+                          setEditData({
+                            ...editData,
+                            hora: e.target.value,
+                          })
                         }
                         className="border border-stone-300 rounded px-2 py-1"
                       />
@@ -253,7 +264,10 @@ export default function Admin() {
                       <select
                         value={editData.estado}
                         onChange={(e) =>
-                          setEditData({ ...editData, estado: e.target.value })
+                          setEditData({
+                            ...editData,
+                            estado: e.target.value,
+                          })
                         }
                         className="border border-stone-300 rounded px-2 py-1"
                       >
@@ -282,7 +296,11 @@ export default function Admin() {
                   <>
                     <td className="p-3">{turno.fecha}</td>
                     <td className="p-3">{turno.hora}</td>
-                    <td className={`p-3 capitalize ${estadoClase(turno.estado)}`}>
+                    <td
+                      className={`p-3 capitalize ${estadoClase(
+                        turno.estado
+                      )}`}
+                    >
                       {turno.estado}
                     </td>
                     <td className="p-3 flex gap-2 justify-center">

@@ -1,39 +1,29 @@
-
-import { Home, Landing, Admin, AdminLogin } from './views'
-import { Routes, Route } from 'react-router-dom'
-
-
-
-
-
+import { Home, Landing, Admin, AdminLogin } from "./views";
+import { Routes, Route } from "react-router-dom";
+import AdminRoute from "./components/AdminRoute";
 
 function App() {
-
-
-
   return (
-
-    <div className='App'>
-
-
-
+    <div className="App">
       <Routes>
+        <Route path="/" element={<Landing />} />
 
-        <Route path='/' element={<Landing />} />
+        <Route path="/home" element={<Home />} />
 
-        <Route path='/home' element={<Home />} />
+        {/* 🔐 RUTA PROTEGIDA */}
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <Admin />
+            </AdminRoute>
+          }
+        />
 
-        <Route path='/admin' element={<Admin />} />
-
-        <Route path='/adminLogin' element={<AdminLogin />} />
-
-
+        <Route path="/adminLogin" element={<AdminLogin />} />
       </Routes>
-
-
-
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
