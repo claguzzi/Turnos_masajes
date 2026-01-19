@@ -2,6 +2,8 @@ import { Home, Landing, Admin, AdminLogin } from "./views";
 import { Routes, Route } from "react-router-dom";
 import AdminRoute from "./components/AdminRoute";
 
+
+
 function App() {
   return (
     <div className="App">
@@ -10,7 +12,7 @@ function App() {
 
         <Route path="/home" element={<Home />} />
 
-        {/* 🔐 RUTA PROTEGIDA */}
+      
         <Route
           path="/admin"
           element={

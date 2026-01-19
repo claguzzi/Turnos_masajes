@@ -29,10 +29,10 @@ export default function Home() {
   const [cargandoHorarios, setCargandoHorarios] = useState(false);
   const [enviandoTurno, setEnviandoTurno] = useState(false);
 
-  // ⚠️ initialValues DE DESARROLLO (NO TOCAR)
+ 
   const initialValues = {
     nombre: "claudio",
-    telefono: "2222222222",
+    telefono: "2223575918",
     email: "claudiolaguzzi@gmail.com",
     fecha: "",
     hora: "",
