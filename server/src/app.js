@@ -10,7 +10,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 
-// Habilita CORS para todas las rutas (modificarlo posteriormente por seguridad)
+
 app.use(cors());
 
 // Prefijo para las rutas
