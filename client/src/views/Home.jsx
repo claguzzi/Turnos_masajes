@@ -6,7 +6,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 /* 🔹 Horarios hardcodeados */
-const HORARIOS = ["19:30", "20:00"];
+const HORARIOS = ["19:30", "20:30"];
 
 /* 🔹 Fechas permitidas (hoy → 1 mes) */
 const getFechaLocal = (date) =>
