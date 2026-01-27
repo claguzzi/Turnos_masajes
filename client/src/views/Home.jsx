@@ -29,7 +29,7 @@ export default function Home() {
   const [cargandoHorarios, setCargandoHorarios] = useState(false);
   const [enviandoTurno, setEnviandoTurno] = useState(false);
 
- 
+
   const initialValues = {
     nombre: "claudio",
     telefono: "2223575918",
@@ -227,6 +227,7 @@ Espacio Zen 🌿
               <label className="block text-stone-700 font-medium mb-1">
                 Horario
               </label>
+
               <Field
                 as="select"
                 name="hora"
@@ -238,16 +239,21 @@ Espacio Zen 🌿
                     ? "Cargando horarios..."
                     : "Seleccioná horario"}
                 </option>
-                {HORARIOS.map((h) => (
-                  <option
-                    key={h}
-                    value={h}
-                    disabled={horariosOcupados.includes(h)}
-                  >
-                    {h} {horariosOcupados.includes(h) ? "⛔ Ocupado" : ""}
-                  </option>
-                ))}
+
+                {HORARIOS
+                  .filter((h) => !horariosOcupados.includes(h))
+                  .map((h) => (
+                    <option key={h} value={h}>
+                      {h}
+                    </option>
+                  ))}
               </Field>
+              {!cargandoHorarios &&
+                HORARIOS.filter((h) => !horariosOcupados.includes(h)).length === 0 && (
+                  <p className="text-sm text-red-500 mt-1">
+                    No hay horarios disponibles para esta dia, por favor eliga otra
+                  </p>
+                )}
               <ErrorMessage
                 name="hora"
                 component="div"
@@ -259,11 +265,10 @@ Espacio Zen 🌿
             <button
               type="submit"
               disabled={!isValid || !values.hora || enviandoTurno}
-              className={`w-full py-3 rounded-full font-medium transition ${
-                !isValid || !values.hora || enviandoTurno
-                  ? "bg-stone-300 cursor-not-allowed"
-                  : "bg-[#7b6f5b] hover:bg-[#6a5f4d] text-white"
-              }`}
+              className={`w-full py-3 rounded-full font-medium transition ${!isValid || !values.hora || enviandoTurno
+                ? "bg-stone-300 cursor-not-allowed"
+                : "bg-[#7b6f5b] hover:bg-[#6a5f4d] text-white"
+                }`}
             >
               {enviandoTurno ? "Reservando..." : "Confirmar turno"}
             </button>
@@ -274,4 +279,3 @@ Espacio Zen 🌿
     </div>
   );
 }
-  

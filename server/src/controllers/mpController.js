@@ -1,9 +1,9 @@
-
-
 const { MercadoPagoConfig, Preference } = require("mercadopago");
 
+
+
 const client = new MercadoPagoConfig({
-  accessToken: "TEST-2260300777899389-082501-af54819a18fb447aad12ca4c33b96ef3-80905278"
+  accessToken: process.env.MP_ACCESS_TOKEN,
 });
 
 const crearPreferencia = async (req, res) => {
@@ -13,8 +13,9 @@ const crearPreferencia = async (req, res) => {
         {
           title: "Seña Turno de masajes",
           quantity: 1,
-          unit_price: 4000,
-          currency_id: "ARS"
+          unit_price: 5000,
+          currency_id: "ARS",
+          sandbox_mode: true
         }
       ],
       back_urls: {

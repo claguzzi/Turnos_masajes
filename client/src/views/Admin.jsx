@@ -68,7 +68,7 @@ export default function Admin() {
   /* 🔐 Logout */
   const cerrarSesion = () => {
     localStorage.removeItem("isAdmin");
-    navigate("/adminLogin");
+    navigate("/home");
   };
 
   const fetchTurnos = async () => {
@@ -297,7 +297,7 @@ export default function Admin() {
 
                       <button
                         onClick={() => eliminarTurno(turno.id)}
-                        className="px-3 py-1 bg-red-100 text-red-700 rounded"
+                        className="px-3 py-1 bg-red-300 text-red-900 rounded"
                       >
                         Eliminar
                       </button>
