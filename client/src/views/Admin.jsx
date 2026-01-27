@@ -11,6 +11,8 @@ const estadoClase = (estado) => {
       return "text-green-700 font-bold";
     case "cancelado":
       return "text-red-700 font-bold";
+    case "bloqueado":
+      return "text-red-500 font-bold line-through opacity-50";
     default:
       return "text-yellow-700 font-bold";
   }
@@ -169,6 +171,7 @@ export default function Admin() {
                   <option value="confirmado">confirmado</option>
                   <option value="realizado">realizado</option>
                   <option value="cancelado">cancelado</option>
+                  <option value="bloqueado">bloqueado</option>
                 </select>
 
                 <div className="flex gap-2 mt-2">
@@ -251,6 +254,7 @@ export default function Admin() {
                       <option value="confirmado">confirmado</option>
                       <option value="realizado">realizado</option>
                       <option value="cancelado">cancelado</option>
+                      <option value="bloqueado">bloqueado</option>
                     </select>
                   ) : (
                     <span className={estadoClase(turno.estado)}>

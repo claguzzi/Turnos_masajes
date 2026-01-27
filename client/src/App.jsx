@@ -16,7 +16,7 @@ function App() {
 
         <Route path="/home" element={<Home />} />
 
-
+        <Route path="/adminLogin" element={<AdminLogin />} />
 
         <Route
           path="/admin"
@@ -36,11 +36,8 @@ function App() {
           }
         />
 
-
-
-        <Route path="/adminLogin" element={<AdminLogin />} />
-
       </Routes>
+      
     </div>
   );
 }
