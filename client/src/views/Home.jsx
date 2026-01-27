@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Pagar from "../components/Pagar";
 
 /* 🔹 Horarios hardcodeados */
 const HORARIOS = ["19:30", "20:30"];
@@ -276,6 +277,7 @@ Espacio Zen 🌿
           </Form>
         )}
       </Formik>
+      <Pagar/>
     </div>
   );
 }
