@@ -1,7 +1,7 @@
 const { MercadoPagoConfig, Preference } = require("mercadopago");
 
 const client = new MercadoPagoConfig({
-  accessToken: process.env.PRODUCTION_MP_ACCESS_TOKEN,
+  accessToken: process.env.MP_ACCESS_TOKEN,
 });
 
 const crearPreferencia = async (req, res) => {
