@@ -18,6 +18,8 @@ function App() {
 
         <Route path="/adminLogin" element={<AdminLogin />} />
 
+         <Route path="/success" element={<Success />} />
+
         <Route
           path="/admin"
           element={
@@ -27,14 +29,14 @@ function App() {
           }
         />
 
-        <Route
+        {/* <Route
           path="/success"
           element={
             <SuccessRoute>
               <Success />
             </SuccessRoute>
           }
-        />
+        /> */}
 
       </Routes>
       

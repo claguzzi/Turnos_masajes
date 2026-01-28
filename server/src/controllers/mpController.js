@@ -7,14 +7,14 @@ const client = new MercadoPagoConfig({
 const crearPreferencia = async (req, res) => {
   try {
     const body = {
-      items: [
-        {
-          title: "Seña Turno de masajes",
-          quantity: 1,
-          unit_price: 10,
-          currency_id: "ARS",
-        },
-      ],
+        items: [
+          {
+            title: "Seña Turno de masajes",
+            quantity: 1,
+            unit_price: 10,
+            currency_id: "ARS",
+          },
+        ],
       
       back_urls: {
         success: "https://turnos-masajes.vercel.app/success",
@@ -30,6 +30,7 @@ const crearPreferencia = async (req, res) => {
     res.json({
       preferenceId: result.id,
       init_point: result.init_point,
+      sand_box_init_point: result.sandbox_init_point,
     });
   } catch (error) {
     console.error(error);
