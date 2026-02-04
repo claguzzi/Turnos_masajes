@@ -1,4 +1,4 @@
-import { Home, Landing, Admin, AdminLogin, Success } from "./views";
+import { Home, Landing, Admin, AdminLogin, Success, Failure } from "./views";
 import { Routes, Route } from "react-router-dom";
 import AdminRoute from "./components/AdminRoute";
 import SuccessRoute from "./components/SuccessRoute";
@@ -18,7 +18,9 @@ function App() {
 
         <Route path="/adminLogin" element={<AdminLogin />} />
 
-         <Route path="/success" element={<Success />} />
+        <Route path="/success" element={<Success />} />
+
+        <Route path="/failure" element={<Failure />} />
 
         <Route
           path="/admin"
@@ -39,7 +41,7 @@ function App() {
         /> */}
 
       </Routes>
-      
+
     </div>
   );
 }
