@@ -1,7 +1,7 @@
 import { Home, Landing, Admin, AdminLogin, Success, Failure } from "./views";
 import { Routes, Route } from "react-router-dom";
 import AdminRoute from "./components/AdminRoute";
-import SuccessRoute from "./components/SuccessRoute";
+
 
 
 
@@ -31,14 +31,7 @@ function App() {
           }
         />
 
-        {/* <Route
-          path="/success"
-          element={
-            <SuccessRoute>
-              <Success />
-            </SuccessRoute>
-          }
-        /> */}
+        
 
       </Routes>
 
