@@ -5,7 +5,9 @@ import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 /* 🔐 Inicializar Mercado Pago una sola vez */
 initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY);
 
-export default function Pagar() {
+
+
+export default function Pagar({ turnoId }) {
   const [preferenceId, setPreferenceId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,6 +19,7 @@ export default function Pagar() {
       const response = await axios.post(
         "http://localhost:3001/api/pago/create_preference",
         {
+          turnoId: turnoId, // Enviar el turnoId al backend
           description: "Seña turno de masajes",
           price: PRICE,
           quantity: 1,
@@ -42,49 +45,43 @@ export default function Pagar() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#f4efe9] px-4 py-10 text-center">
+    <div className="w-full max-w-md mt-6">
+      <div className="bg-white/70 backdrop-blur shadow-lg rounded-2xl p-6 border border-stone-200 text-center">
 
-      <div className="bg-white/70 backdrop-blur shadow-lg rounded-2xl p-8 w-full max-w-md border border-stone-200">
-
-        <h2 className="text-xl font-medium text-stone-700 mb-4">
-          Seña para tu turno de masajes
+        <h2 className="text-lg font-medium text-stone-700 mb-3">
+          Seña para tu turno
         </h2>
 
-        <p className="text-stone-600 mb-6 leading-relaxed">
+        <p className="text-stone-600 mb-4">
           Para asegurar tu turno, solicitamos una seña.
         </p>
 
-        <p className="text-stone-700 mb-8">
+        <p className="text-stone-700 mb-6">
           Monto:
-          <span className="block text-3xl font-serif font-semibold mt-2">
+          <span className="block text-2xl font-serif font-semibold mt-1">
             ${PRICE}
           </span>
         </p>
 
-        {/* Botón propio */}
         {!preferenceId && (
           <button
             onClick={handlePagarSenia}
             disabled={loading}
-            className="w-full px-10 py-3 rounded-full bg-[#7b6f5b] text-white font-medium shadow-lg hover:bg-[#6a5f4d] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 rounded-full bg-[#7b6f5b] text-white font-medium hover:bg-[#6a5f4d] transition disabled:opacity-50"
           >
             {loading ? "Preparando pago..." : "Pagar seña"}
           </button>
         )}
 
         {error && (
-          <p className="text-red-600 text-sm mt-4">
+          <p className="text-red-600 text-sm mt-3">
             {error}
           </p>
         )}
 
-        {/* Mercado Pago */}
         {preferenceId && (
           <div className="mt-6 border-t border-stone-300 pt-6">
-            <Wallet
-              key={preferenceId}
-              initialization={{ preferenceId }}
-            />
+            <Wallet initialization={{ preferenceId }} />
           </div>
         )}
       </div>

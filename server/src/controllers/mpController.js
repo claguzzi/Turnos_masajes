@@ -9,6 +9,9 @@ const client = new MercadoPagoConfig({
 
 const crearPreferencia = async (req, res) => {
   try {
+
+    const turnoId = req.body.turnoId; 
+
     const body = {
         items: [
           {
@@ -18,8 +21,8 @@ const crearPreferencia = async (req, res) => {
             currency_id: "ARS",
           },
         ],
-
-      //  external_reference: `turno_${turno.id}`,
+        // harcodeado el id
+       external_reference: turnoId,
 
       back_urls: {
         success: "https://turnos-masajes.vercel.app/success",

@@ -29,8 +29,10 @@ export default function Home() {
   const [fechaSeleccionada, setFechaSeleccionada] = useState("");
   const [cargandoHorarios, setCargandoHorarios] = useState(false);
   const [enviandoTurno, setEnviandoTurno] = useState(false);
+  const [turnoCreado, setTurnoCreado] = useState(null);
 
 
+  
   const initialValues = {
     nombre: "claudio",
     telefono: "2223575918",
@@ -84,10 +86,8 @@ Espacio Zen 🌿
 
   /* 🚫 SUBMIT BLOQUEADO A UN SOLO CLICK */
   const handleSubmit = async (values, { resetForm }) => {
-    // ⛔ BLOQUEO TOTAL
     if (enviandoTurno) return;
 
-    // ⛔ Protección extra contra duplicados
     if (horariosOcupados.includes(values.hora)) {
       Swal.fire(
         "Horario no disponible",
@@ -100,7 +100,14 @@ Espacio Zen 🌿
     setEnviandoTurno(true);
 
     try {
-      await axios.post("http://localhost:3001/api/turnos", values);
+      // ✅ guardar respuesta
+      const { data } = await axios.post(
+        "http://localhost:3001/api/turnos",
+        values
+      );
+
+      // ✅ guardar turno pendiente
+      setTurnoCreado(data);
 
       try {
         await enviarEmailConfirmacion(values);
@@ -110,7 +117,7 @@ Espacio Zen 🌿
 
       Swal.fire({
         title: "¡Turno reservado!",
-        text: "📧 Te enviamos un email con la confirmación",
+        text: "Para confirmarlo, aboná la seña",
         icon: "success",
         confirmButtonColor: "#7b6f5b",
       });
@@ -149,7 +156,6 @@ Espacio Zen 🌿
       >
         {({ isValid, setFieldValue, values }) => (
           <Form className="bg-white/70 backdrop-blur p-6 rounded-2xl shadow-xl w-full max-w-md border border-stone-200">
-
             {/* Nombre */}
             <div className="mb-4">
               <label className="block text-stone-700 font-medium mb-1">
@@ -249,12 +255,16 @@ Espacio Zen 🌿
                     </option>
                   ))}
               </Field>
+
               {!cargandoHorarios &&
-                HORARIOS.filter((h) => !horariosOcupados.includes(h)).length === 0 && (
+                HORARIOS.filter((h) => !horariosOcupados.includes(h)).length ===
+                  0 && (
                   <p className="text-sm text-red-500 mt-1">
-                    No hay horarios disponibles para esta dia, por favor eliga otra
+                    No hay horarios disponibles para este día, por favor elegí
+                    otro.
                   </p>
                 )}
+
               <ErrorMessage
                 name="hora"
                 component="div"
@@ -266,18 +276,24 @@ Espacio Zen 🌿
             <button
               type="submit"
               disabled={!isValid || !values.hora || enviandoTurno}
-              className={`w-full py-3 rounded-full font-medium transition ${!isValid || !values.hora || enviandoTurno
-                ? "bg-stone-300 cursor-not-allowed"
-                : "bg-[#7b6f5b] hover:bg-[#6a5f4d] text-white"
-                }`}
+              className={`w-full py-3 rounded-full font-medium transition ${
+                !isValid || !values.hora || enviandoTurno
+                  ? "bg-stone-300 cursor-not-allowed"
+                  : "bg-[#7b6f5b] hover:bg-[#6a5f4d] text-white"
+              }`}
             >
               {enviandoTurno ? "Reservando..." : "Confirmar turno"}
             </button>
-
           </Form>
         )}
       </Formik>
-      <Pagar/>
+
+      {/* ✅ PAGO SOLO SI HAY TURNO */}
+      {turnoCreado && (
+        <div className="mt-6 w-full max-w-md">
+          <Pagar turnoId={turnoCreado.id} />
+        </div>
+      )}
     </div>
   );
 }

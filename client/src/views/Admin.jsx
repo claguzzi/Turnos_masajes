@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
-import Pagar from "../components/Pagar";
 
 
 /* 🔹 Color por estado */
@@ -155,6 +154,10 @@ export default function Admin() {
       <div className="sm:hidden mt-4 space-y-4">
         {turnosPaginados.map((turno) => (
           <div key={turno.id} className="bg-white p-4 rounded-xl shadow">
+            <p className="text-xs text-gray-400 mb-1">
+              ID turno: #{turno.id}
+            </p>
+
             <p className="font-semibold">{turno.nombre}</p>
             <p>{turno.telefono}</p>
             <p>{turno.email}</p>
@@ -231,6 +234,7 @@ export default function Admin() {
         <table className="w-full text-sm">
           <thead className="bg-stone-200">
             <tr>
+              <th className="p-2 text-left">ID</th>
               <th className="p-2 text-left">Nombre</th>
               <th className="p-2 text-left">Fecha</th>
               <th className="p-2 text-left">Hora</th>
@@ -241,6 +245,10 @@ export default function Admin() {
           <tbody>
             {turnosPaginados.map((turno) => (
               <tr key={turno.id} className="border-t">
+                <td className="p-2 text-xs text-gray-500">
+                  #{turno.id}
+                </td>
+
                 <td className="p-2">{turno.nombre}</td>
                 <td className="p-2">{turno.fecha}</td>
                 <td className="p-2">{turno.hora}</td>
