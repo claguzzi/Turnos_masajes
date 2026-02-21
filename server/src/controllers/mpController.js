@@ -6,7 +6,6 @@ const client = new MercadoPagoConfig({
 
 
 
-
 const crearPreferencia = async (req, res) => {
   try {
 
