@@ -2,7 +2,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { turnosSchema } from "../validations/turnosSchema";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../lib/api";
 import { useEffect, useState } from "react";
 
 /* 🔹 Horarios hardcodeados */
@@ -30,9 +30,9 @@ export default function Home() {
   const [enviandoTurno, setEnviandoTurno] = useState(false);
 
   const initialValues = {
-    nombre: "claudio",
-    telefono: "2223575918",
-    email: "claudiolaguzzi@gmail.com",
+    nombre: "",
+    telefono: "",
+    email: "",
     fecha: "",
     hora: "",
   };
@@ -41,9 +41,7 @@ export default function Home() {
   const fetchHorariosOcupados = async (fecha) => {
     setCargandoHorarios(true);
     try {
-      const { data } = await axios.get(
-        `http://localhost:3001/api/turnos?fecha=${fecha}`
-      );
+      const { data } = await api.get(`/turnos?fecha=${encodeURIComponent(fecha)}`);
       setHorariosOcupados(data.map((t) => t.hora));
     } catch (error) {
       console.error("Error cargando horarios", error);
@@ -62,7 +60,7 @@ export default function Home() {
   }, [fechaSeleccionada]);
 
   /* 📧 Email confirmación */
-  const enviarEmailConfirmacion = async (turno) => {
+  const _enviarEmailConfirmacion = async (turno) => {
     const mensaje = `
 Hola ${turno.nombre} 👋
 
@@ -74,7 +72,7 @@ Tu turno fue reservado correctamente ✅
 Espacio Zen 🌿
 `;
 
-    await axios.post("http://localhost:3001/api/email", {
+    await api.post("/email", {
       to: turno.email,
       subject: "Confirmación de turno – Espacio Zen",
       text: mensaje,
@@ -97,13 +95,7 @@ Espacio Zen 🌿
     setEnviandoTurno(true);
 
     try {
-      await axios.post("http://localhost:3001/api/turnos", values);
-
-      try {
-        await enviarEmailConfirmacion(values);
-      } catch (error) {
-        console.warn("No se pudo enviar el email", error);
-      }
+      await api.post("/turnos", values);
 
       Swal.fire({
         title: "¡Turno reservado!",
@@ -118,7 +110,7 @@ Espacio Zen 🌿
     } catch (error) {
       Swal.fire(
         "Error",
-        error.response?.data?.message || "No se pudo reservar",
+        error.response?.data?.error || "No se pudo reservar",
         "error"
       );
     } finally {

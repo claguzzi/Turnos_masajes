@@ -29,9 +29,9 @@ const getUserHandler = async (req, res) => {
 const loginUserHandler = async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await loginUserController(username, password);
+    const { user, token } = await loginUserController(username, password);
 
-    res.json({ message: "Login exitoso", user: user.username });
+    res.json({ message: "Login exitoso", user: user.username, token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

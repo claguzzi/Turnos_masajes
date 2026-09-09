@@ -10,13 +10,15 @@ const { crearTurnoHandler,
 
 
 const TurnosRouter = Router();
+const { requireAdmin } = require("../middleware/auth");
 
 
 
 TurnosRouter.post('/', crearTurnoHandler);
 TurnosRouter.get('/', obtenerTurnosHandler);
-TurnosRouter.put('/:id', actualizarTurnoHandler);
-TurnosRouter.delete('/:id', eliminarTurnoHandler);
+TurnosRouter.get('/admin', requireAdmin, obtenerTurnosHandler);
+TurnosRouter.put('/:id', requireAdmin, actualizarTurnoHandler);
+TurnosRouter.delete('/:id', requireAdmin, eliminarTurnoHandler);
 
 
 

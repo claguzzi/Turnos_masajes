@@ -44,18 +44,15 @@ module.exports = (sequelize) => {
     },
 
     // 💰 Pago
-    pagado: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-
     // 🧾 ID del pago en Mercado Pago
-    payment_id: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-
   }, {
     timestamps: true, // createdAt / updatedAt
+    indexes: [
+      {
+        unique: true,
+        fields: ["fecha", "hora"],
+        name: "turnos_fecha_hora_unico",
+      },
+    ],
   });
 };

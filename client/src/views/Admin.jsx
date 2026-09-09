@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../lib/api";
 import Swal from "sweetalert2";
 
 
@@ -70,13 +70,13 @@ export default function Admin() {
 
   /* 🔐 Logout */
   const cerrarSesion = () => {
-    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("adminToken");
     navigate("/home");
   };
 
   const fetchTurnos = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3001/api/turnos");
+      const { data } = await api.get("/turnos/admin");
       setTurnos(data);
       setPaginaActual(1);
     } catch {
@@ -103,7 +103,7 @@ export default function Admin() {
     if (!result.isConfirmed) return;
 
     try {
-      await axios.delete(`http://localhost:3001/api/turnos/${id}`);
+      await api.delete(`/turnos/${id}`);
       fetchTurnos();
       Swal.fire("Eliminado", "Turno eliminado", "success");
     } catch {
@@ -118,7 +118,7 @@ export default function Admin() {
 
   const guardarEstado = async (id) => {
     try {
-      await axios.put(`http://localhost:3001/api/turnos/${id}`, {
+      await api.put(`/turnos/${id}`, {
         estado: nuevoEstado,
       });
       setEditEstadoId(null);

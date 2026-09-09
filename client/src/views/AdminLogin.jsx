@@ -1,6 +1,6 @@
 import { Formik, Form, Field } from "formik";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../lib/api";
 import Swal from "sweetalert2";
 
 export default function AdminLogin() {
@@ -22,14 +22,11 @@ export default function AdminLogin() {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:3001/api/user/login",
-        { username, password }
-      );
+      const response = await api.post("/user/login", { username, password });
 
       if (response.status === 200) {
         // ✅ FLAG ADMIN
-        localStorage.setItem("isAdmin", "true");
+        localStorage.setItem("adminToken", response.data.token);
 
         Swal.fire({
           icon: "success",
@@ -42,6 +39,7 @@ export default function AdminLogin() {
       }
     } catch (error) {
       const msg =
+        error.response?.data?.error ||
         error.response?.data?.message ||
         "Credenciales inválidas o error de servidor";
 
